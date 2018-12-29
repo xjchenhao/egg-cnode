@@ -23,7 +23,7 @@ module.exports = appInfo => {
   config.session_secret = 'node_club_secret'; // 务必修改
 
   // add your config here
-  config.middleware = [ 'locals', 'authUser', 'blockUser', 'errorPage' ];
+  config.middleware = [ 'locals', 'authUser', 'blockUser', 'errorPage', 'errorHandler' ];
 
   config.authUser = {
     enable: true,
@@ -118,6 +118,8 @@ module.exports = appInfo => {
     url: process.env.EGG_MONGODB_URL || 'mongodb://127.0.0.1:27017/egg_cnode',
     options: {
       server: { poolSize: 20 },
+      reconnectTries: 10,
+      reconnectInterval: 500,
     },
   };
 
@@ -159,6 +161,15 @@ module.exports = appInfo => {
   config.create_user_per_ip = 1000;
 
   config.search = 'google'; // 'google', 'baidu', 'local'
+
+  config.security = {
+    csrf: {
+      ignore: '/api/*/*',
+    },
+  };
+
+  config.default_page = 1;
+  config.default_limit = 20;
 
   return config;
 };
